@@ -4,10 +4,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.patches as patches
+import matplotlib.font_manager as font_manager
+import matplotlib as mpl
 
 # Open the PDF file
 pdf_path = 'instructions.pdf'
 output_pdf_path = 'instructions_markup.pdf'
+path = '/System/Library/Fonts/Supplemental/AmericanTypewriter.ttc'
+prop = font_manager.FontProperties(fname=path)
+mpl.rcParams['font.family'] = prop.get_name()
 
 ULCorner = [210,120] # down 210 pixels from top and over 120 pixels from left is ULCorner of grid.
 stride = 46.5 # width of lego brick.
