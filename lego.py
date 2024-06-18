@@ -21,6 +21,8 @@ color_dict = {
     # Add more color mappings as needed
 }
 
+colors_observed = {}
+
 pdf_document = fitz.open(pdf_path)
 unknown_colors = []
 
@@ -53,6 +55,10 @@ with PdfPages(output_pdf_path) as pdf:
                         mink = k
                         foreground = color_dict[k][1]
                         idx = color_dict[k][0]
+                        if mink in colors_observed.keys():
+                            colors_observed[mink] += 1
+                        else:
+                            colors_observed[mink] = 1
                 if minval > 10:
                     # Color match not found...
                     foreground = 'red' # redd
@@ -81,8 +87,16 @@ with PdfPages(output_pdf_path) as pdf:
         plt.close(fig)
 print(f'Saved {pdf_path}')
 
-unknown_colors = np.array(unknown_colors)
-unknown_colors = np.unique(unknown_colors,axis=0)
+unknown_colors_all = np.array(unknown_colors)
+unknown_colors = np.unique(unknown_colors_all,axis=0)
+
+for unk in unknown_colors_all:
+    tunk = tuple(unk)
+    print(tunk)
+    if tunk in colors_observed.keys():
+        colors_observed[tunk] += 1
+    else:
+        colors_observed[tunk] = 1
 
 ## Now make a swatch report for Jacob. :)
 
@@ -97,7 +111,7 @@ with PdfPages(pdf_file) as pdf:
 
     swatch_size = .75  # Size of each swatch
     padding = 0.25  # Padding between swatches
-    x, y = 0, 11  # Starting position
+    x, y = 1, 11  # Starting position
 
     for rgb, (number, text_color) in color_dict.items():
         # Draw the swatch
@@ -105,7 +119,8 @@ with PdfPages(pdf_file) as pdf:
         ax.add_patch(rect)
 
         # Draw the number on the swatch
-        ax.text(x + swatch_size / 2, y - swatch_size / 2, str(number), ha='center', va='center', color=text_color, fontsize=12)
+        ax.text(x + swatch_size / 2, y - swatch_size / 4, str(number), ha='center', va='center', color=text_color, fontsize=12)
+        ax.text(x + swatch_size / 2, y - (3*swatch_size / 4), str(int(colors_observed[rgb])), ha='center', va='center', color=text_color, fontsize=12)
 
         # Move to the next position
         x += swatch_size + padding
@@ -129,7 +144,8 @@ with PdfPages(pdf_file) as pdf:
         ax.add_patch(rect)
 
         # Draw the number on the swatch
-        ax.text(x + swatch_size / 2, y - swatch_size / 2, str(number), ha='center', va='center', color=text_color, fontsize=12)
+        ax.text(x + swatch_size / 2, y - swatch_size / 4, str(number), ha='center', va='center', color=text_color, fontsize=12)
+        ax.text(x + swatch_size / 2, y - (3*swatch_size / 4), str(int(colors_observed[tuple(rgb)])), ha='center', va='center', color=text_color, fontsize=12)
 
         # Move to the next position
         x += swatch_size + padding
@@ -149,3 +165,5 @@ with PdfPages(pdf_file) as pdf:
     plt.close()
 print("Saved",pdf_file)
 
+
+# print(colors_observed)
