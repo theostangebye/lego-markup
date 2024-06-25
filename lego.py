@@ -18,6 +18,9 @@ ULCorner = [210,120] # down 210 pixels from top and over 120 pixels from left is
 stride = 46.5 # width of lego brick.
 grid_size = 8 # number of bricks.
 
+###### JONATHAN: Change figsize_instructions to match your booklet page size (i heard it might be 8.5x5 or something like that.) 
+figsize_instructions = (8.5,11) # figure size of the instructions_markup.pdf.  This should be the same as your input pdf.
+figsize = (8.5, 11) # this is the figure size of the color swatches.
 DPI = 220 # Resolution of the output... if you think your markups look crappy... CRANK THIS UP
 
 # Define the color dictionary
@@ -103,7 +106,7 @@ with PdfPages(output_pdf_path) as pdf:
                 grid_values.append([idx,foreground])
 
         # Now, we draw the grid_values onto an image!
-        fig, ax = plt.subplots(figsize=(8.5,11), dpi=DPI)
+        fig, ax = plt.subplots(figsize=figsize_instructions, dpi=DPI)
         ax.imshow(img_pil)
         # Remove axes
         ax.axis('off')
@@ -139,7 +142,7 @@ for unk in unknown_colors_all:
 # Create a PDF with matplotlib
 pdf_file = "color_swatches.pdf"
 with PdfPages(pdf_file) as pdf:
-    fig, ax = plt.subplots(figsize=(8.5, 11), dpi=DPI)  # Letter size page
+    fig, ax = plt.subplots(figsize=figsize, dpi=DPI)  # Letter size page
     ax.set_xlim(0, 8.5)
     ax.set_ylim(0, 11)
     ax.axis('off')
@@ -169,7 +172,7 @@ with PdfPages(pdf_file) as pdf:
             if y - swatch_size < 0:
                 pdf.savefig(fig)
                 plt.clf()
-                fig, ax = plt.subplots(figsize=(8.5, 11) ,dpi=DPI)
+                fig, ax = plt.subplots(figsize=figsie ,dpi=DPI)
                 ax.set_xlim(0, 8.5)
                 ax.set_ylim(0, 11)
                 ax.axis('off')
@@ -198,7 +201,7 @@ with PdfPages(pdf_file) as pdf:
             if y - swatch_size < 0:
                 pdf.savefig(fig)
                 plt.clf()
-                fig, ax = plt.subplots(figsize=(8.5, 11),  dpi=DPI)
+                fig, ax = plt.subplots(figsize=figsie,  dpi=DPI)
                 ax.set_xlim(0, 8.5)
                 ax.set_ylim(0, 11)
                 ax.axis('off')
