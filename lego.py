@@ -10,20 +10,49 @@ import matplotlib as mpl
 # Open the PDF file
 pdf_path = 'instructions.pdf'
 output_pdf_path = 'instructions_markup.pdf'
-path = '/System/Library/Fonts/Supplemental/AmericanTypewriter.ttc'
+path = '/System/Library/Fonts/Supplemental/Arial Bold.ttf'
 prop = font_manager.FontProperties(fname=path)
 mpl.rcParams['font.family'] = prop.get_name()
 
-ULCorner = [210,120] # down 210 pixels from top and over 120 pixels from left is ULCorner of grid.
-stride = 46.5 # width of lego brick.
-grid_size = 8 # number of bricks.
+ULCorner = [68,29]
+stride = 32.125
+grid_size = 8
 
 # Define the color dictionary
 color_dict = {
-    (112, 61, 34): (1, 'black'),
-    (136, 137, 131): (2, 'xkcd:blue'),  # Green square: Number 2, Black color for number
-    (92, 59, 14): (3, 'xkcd:green'),  # Blue square: Number 3, White color for number
-    # Add more color mappings as needed
+    (21, 35, 46): (1, 'white'), #black
+    (112, 61, 34): (2, 'white'), #reddish brown
+    (91, 60, 14): (3, 'white'), #dark brown
+    (180, 168, 142): (4, 'black'), #dark tan
+    (255, 252, 214): (5, 'black'), #light nougat
+    (134, 137, 130): (6, 'white'), #dark bluish gray
+    (40, 92, 70): (7, 'white'), #dark green
+    (186, 186, 114): (8, 'black'), #olive green
+    (247, 176, 130): (9, 'black'), #nougat
+    (255, 242, 190): (10, 'black'), #tan
+    (241, 140, 62): (11, 'black'), #medium nougat
+    (255, 255, 198): (12, 'black'), #yellowish green
+    (255, 255, 255): (13, 'black'), #white
+    (140, 30, 31): (14, 'white'), #dark red
+    (202, 109, 14): (15, 'white'), #dark orange
+    (255, 222, 81): (16, 'black'), #bright light orange
+    (194, 222, 207): (17, 'black'), #sand green
+    (238, 43, 25): (18, 'black'), #red
+    (224, 255, 255): (19, 'black'), #light aqua
+    (225, 184, 244): (20, 'black'), #lavender (rubber)
+    (14, 160, 175): (21, 'white'), #dark turquoise
+    (193, 198, 202): (22, 'black'), #light bluish gray
+    (113, 140, 161): (23, 'white'), #sand blue
+    (255, 206, 237): (24, 'black'), #bright pink
+    (82, 230, 255): (25, 'black'), #medium azure
+    (255, 168, 42): (26, 'black'), #orange
+    (55, 150, 84): (27, 'white'), #green
+    (29, 70, 114): (28, 'white'), #dark blue
+    (255, 145, 144): (29, 'black'), #coral
+    (255, 242, 76): (30, 'black'), #yellow
+    (163, 229, 255): (31, 'black'), #bright light blue
+    (118, 188, 247): (32, 'black'), #medium blue
+    (206, 148, 222): (33, 'black'), #medium lavender
 }
 
 colors_observed = {}
@@ -84,7 +113,7 @@ with PdfPages(output_pdf_path) as pdf:
                 t = grid_values[tile_number][0]
                 # print(f"Text: {t}, Color: {c}")
                 ax.text(ULCorner[1] + x * (stride / 1) + stride/2, ULCorner[0] + y * (stride / 1) + stride/2 + 3, str(t),
-                        color=c, fontsize=18, ha='center', va='center')
+                        color=c, fontsize=16, ha='center', va='center')
 
         # Save the figure as a PDF without borders
         plt.subplots_adjust(left=0, right=1, top=1, bottom=0)
@@ -125,7 +154,6 @@ with PdfPages(pdf_file) as pdf:
 
         # Draw the number on the swatch
         ax.text(x + swatch_size / 2, y - swatch_size / 4, str(number), ha='center', va='center', color=text_color, fontsize=12)
-        ax.text(x + swatch_size / 2, y - (3*swatch_size / 4), str(int(colors_observed[rgb])), ha='center', va='center', color=text_color, fontsize=12)
 
         # Move to the next position
         x += swatch_size + padding
