@@ -14,9 +14,11 @@ path = '/System/Library/Fonts/Supplemental/Arial Bold.ttf'
 prop = font_manager.FontProperties(fname=path)
 mpl.rcParams['font.family'] = prop.get_name()
 
-ULCorner = [68,29]
-stride = 32.125
-grid_size = 8
+ULCorner = [210,120] # down 210 pixels from top and over 120 pixels from left is ULCorner of grid.
+stride = 46.5 # width of lego brick.
+grid_size = 8 # number of bricks.
+
+DPI = 220 # Resolution of the output... if you think your markups look crappy... CRANK THIS UP
 
 # Define the color dictionary
 color_dict = {
@@ -101,7 +103,7 @@ with PdfPages(output_pdf_path) as pdf:
                 grid_values.append([idx,foreground])
 
         # Now, we draw the grid_values onto an image!
-        fig, ax = plt.subplots(figsize=(img_cv.shape[1] / 100, img_cv.shape[0] / 100), dpi=100)
+        fig, ax = plt.subplots(figsize=(8.5,11), dpi=DPI)
         ax.imshow(img_pil)
         # Remove axes
         ax.axis('off')
@@ -133,12 +135,11 @@ for unk in unknown_colors_all:
         colors_observed[tunk] = 1
 
 ## Now make a swatch report for Jacob. :)
-
 # Create a new PDF with ReportLab
 # Create a PDF with matplotlib
 pdf_file = "color_swatches.pdf"
 with PdfPages(pdf_file) as pdf:
-    fig, ax = plt.subplots(figsize=(8.5, 11))  # Letter size page
+    fig, ax = plt.subplots(figsize=(8.5, 11), dpi=DPI)  # Letter size page
     ax.set_xlim(0, 8.5)
     ax.set_ylim(0, 11)
     ax.axis('off')
@@ -154,6 +155,11 @@ with PdfPages(pdf_file) as pdf:
 
         # Draw the number on the swatch
         ax.text(x + swatch_size / 2, y - swatch_size / 4, str(number), ha='center', va='center', color=text_color, fontsize=12)
+        if tuple(rgb) in colors_observed.keys():
+            num_observed = colors_observed[tuple(rgb)]
+        else:
+            num_observed = 0
+        ax.text(x + swatch_size / 2, y - (3*swatch_size / 4), str(int(num_observed)), ha='center', va='center', color=text_color, fontsize=12)
 
         # Move to the next position
         x += swatch_size + padding
@@ -163,7 +169,7 @@ with PdfPages(pdf_file) as pdf:
             if y - swatch_size < 0:
                 pdf.savefig(fig)
                 plt.clf()
-                fig, ax = plt.subplots(figsize=(8.5, 11))
+                fig, ax = plt.subplots(figsize=(8.5, 11) ,dpi=DPI)
                 ax.set_xlim(0, 8.5)
                 ax.set_ylim(0, 11)
                 ax.axis('off')
@@ -178,7 +184,11 @@ with PdfPages(pdf_file) as pdf:
 
         # Draw the number on the swatch
         ax.text(x + swatch_size / 2, y - swatch_size / 4, str(number), ha='center', va='center', color=text_color, fontsize=12)
-        ax.text(x + swatch_size / 2, y - (3*swatch_size / 4), str(int(colors_observed[tuple(rgb)])), ha='center', va='center', color=text_color, fontsize=12)
+        if tuple(rgb) in colors_observed.keys():
+            num_observed = colors_observed[tuple(rgb)]
+        else:
+            num_observed = 0
+        ax.text(x + swatch_size / 2, y - (3*swatch_size / 4), str(int(num_observed)), ha='center', va='center', color=text_color, fontsize=12)
 
         # Move to the next position
         x += swatch_size + padding
@@ -188,7 +198,7 @@ with PdfPages(pdf_file) as pdf:
             if y - swatch_size < 0:
                 pdf.savefig(fig)
                 plt.clf()
-                fig, ax = plt.subplots(figsize=(8.5, 11))
+                fig, ax = plt.subplots(figsize=(8.5, 11),  dpi=DPI)
                 ax.set_xlim(0, 8.5)
                 ax.set_ylim(0, 11)
                 ax.axis('off')
